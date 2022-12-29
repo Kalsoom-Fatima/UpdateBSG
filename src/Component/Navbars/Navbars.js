@@ -32,19 +32,18 @@ function Navbars({ state }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-//     const { account } = useWeb3React();
-//     console.log(account);
-//     const { login,logout } = useAuth();
-//     const connectMetaMask = () => {
-//          console.log('click')
-//          login("injected");
-//     }
+    const { account } = useWeb3React();
+    const { login,logout } = useAuth();
+    const connectMetaMask = () => {
+         console.log('click')
+         login("injected");
+    }
 
 
-//    const Disconnect=()=>{
-//          logout()
+   const Disconnect=()=>{
+         logout()
 
-//     }
+    }
 
     return (
         <div>
@@ -59,15 +58,27 @@ function Navbars({ state }) {
                     {
                         state ? (
                             <div className='d-flex align-items-center'>
+                                {!account ?
                                 <button
                                     href="#"
                                     
                                     className="gamestart mobileRow me-3"
                                     style={{ display: "block" }}
-                                    // onClick={connectMetaMask}
+                                    onClick={connectMetaMask}
                                 >
                                    Conect Wallet 
                                 </button>
+                                :
+                                <button
+                                    href="#"
+                                    
+                                    className="gamestart mobileRow me-3"
+                                    style={{ display: "block" }}
+                                    onClick={Disconnect}
+                                >
+                                   Disconnect Wallet 
+                                </button>
+}
                                
                                 <div className="both_dev mt-1" >
 
