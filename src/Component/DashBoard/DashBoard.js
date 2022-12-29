@@ -18,6 +18,8 @@ import modalX from "../../Assets/modal-x.png"
 
 import ApproveTokens from "../../hooks/Approve";
 import Deposit from "../../hooks/Deposit";
+import Withdraw from "../../hooks/Withdraw";
+
 
 function DashBoard() {
 	const [modalShow, setModalShow] = React.useState(false);
@@ -26,19 +28,32 @@ function DashBoard() {
 
 	const { deposit } = Deposit()
     const { Approve } = ApproveTokens()
+	const { withdraw} = Withdraw()
 
     const [depositAmount, setDepositAmount] = useState('');
-
+	console.log("Deposit amount",depositAmount)
 	const GetDeposit = async () => {
+		if (depositAmount == '' || 0) {
+			alert('please enter value ')
+			return;
+		}
+		if(depositAmount < 100){
+			alert("Value should be greater than 100")
+			return;
+		}
         try {
-            if (depositAmount == '' || 0) {
-                alert('please enter value ')
-            }
-            else {
-                deposit(depositAmount)
-            }
+        	
+               await deposit(depositAmount)
 
 
+        } catch (e) {
+            console.log("e", e);
+        }
+    }
+	const GetWithdraw = async () => {
+        try {
+               await withdraw();
+			   console.log("Hello");
         } catch (e) {
             console.log("e", e);
         }
@@ -780,7 +795,7 @@ function DashBoard() {
 										<div className="withdraw-body-data-button">
 											<button className="withdraw-cancel" data-bs-dismiss="modal"
 												data-lang="cancel" onClick={() => setModalShowOne(false)}>Cancel</button>
-											<button className="withdraw-confirm" data-lang="withdraw"> Withdraw </button>
+											<button className="withdraw-confirm" data-lang="withdraw" onClick={GetWithdraw}> Withdraw </button>
 										</div>
 									</div>
 								</div>
