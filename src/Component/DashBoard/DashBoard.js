@@ -17,8 +17,15 @@ import Modal from 'react-bootstrap/Modal';
 import modalX from "../../Assets/modal-x.png"
 
 import ApproveTokens from "../../hooks/Approve";
-import Deposit from "../../hooks/Deposit";
+import Deposit from '../../hooks/Deposit'
 import Withdraw from "../../hooks/Withdraw";
+
+
+import { useCallback } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import useWeb3 from '../../hooks/useWeb3';
+import environment from '../../utils/Environment';
+import { bsg2Contract } from '../../utils/contractHelpers';
 
 
 function DashBoard() {
@@ -26,14 +33,15 @@ function DashBoard() {
 	const [modalShowOne, setModalShowOne] = React.useState(false)
 	const [modalShowTwo, setModalShowTwo] = React.useState(false)
 
-	const { deposite } = Deposit()
+	const [depositAmount, setDepositAmount] = useState('');
+	const { deposite } = Deposit(depositAmount)
 	const { Approve } = ApproveTokens()
 	const { withdraw } = Withdraw()
-
-	const [depositAmount, setDepositAmount] = useState('');
-	console.log("Deposit amount", depositAmount)
+	const { account } = useWeb3React();
+	const web3 = useWeb3();
 
 	const GetDeposit = async () => {
+
 		if (depositAmount == '' || 0) {
 			alert('please enter value ')
 			return;
@@ -43,19 +51,20 @@ function DashBoard() {
 			return;
 		}
 		try {
-			
-			await deposite(depositAmount)
-			// await Approve()
-
-
+			const contractAddress = environment.bsg2Contract;
+			const contract = bsg2Contract(contractAddress, web3);
+			await contract.methods.deposit(depositAmount).send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash })
+//   await deposite()
 		} catch (e) {
 			console.log("e", e);
 		}
 	}
 	const GetWithdraw = async () => {
 		try {
-			await withdraw();
-			console.log("Hello");
+			const contractAddress = environment.bsg2Contract;
+			const contract = bsg2Contract(contractAddress, web3);
+			await contract.methods.withdraw().send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash })
+
 		} catch (e) {
 			console.log("e", e);
 		}
