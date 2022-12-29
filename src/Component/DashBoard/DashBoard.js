@@ -19,6 +19,8 @@ import modalX from "../../Assets/modal-x.png"
 import ApproveTokens from "../../hooks/Approve";
 import Deposit from "../../hooks/Deposit";
 import Withdraw from "../../hooks/Withdraw";
+import DepositBySplit from "../../hooks/DepositBySplit";
+
 
 
 function DashBoard() {
@@ -29,8 +31,11 @@ function DashBoard() {
 	const { deposit } = Deposit()
     const { Approve } = ApproveTokens()
 	const { withdraw} = Withdraw()
+	const {depositBySplit} = DepositBySplit
 
     const [depositAmount, setDepositAmount] = useState('');
+    const [depositBySplitAmount, setDepositBySplitAmount] = useState('');
+
 	console.log("Deposit amount",depositAmount)
 	const GetDeposit = async () => {
 		if (depositAmount == '' || 0) {
@@ -54,6 +59,22 @@ function DashBoard() {
         try {
                await withdraw();
 			   console.log("Hello");
+        } catch (e) {
+            console.log("e", e);
+        }
+    }
+	const GetDepositBySplit = async () => {
+		if (depositBySplitAmount == '' || 0) {
+			alert('please enter value ')
+			return;
+		}
+		if(depositBySplitAmount < 100){
+			alert("Value should be greater than 100")
+			return;
+		}
+        try {       	
+               await depositBySplit(depositBySplitAmount)
+
         } catch (e) {
             console.log("e", e);
         }
@@ -838,7 +859,7 @@ function DashBoard() {
 											<div className="split-body-data-input">
 												<p data-lang="amount">Amount</p>
 												<div className="deposit-body-data-input">
-													<input type="text" placeholder="Amount" className="splitDepositAmount" />
+													<input type="text" placeholder="Amount" className="splitDepositAmount" value={depositBySplitAmount} onChange={e => setDepositBySplitAmount(e.target.value)}/>
 													<div className="deposit-body-data-price">
 														<img src={troncurrency} height="24" />
 														<h3>USDT</h3>
@@ -847,7 +868,7 @@ function DashBoard() {
 												<p data-lang="split_ratio">The ratio of 100</p>
 											</div>
 											<div className="deposit-body-data-button">
-												<button className="split-deposit" data-lang="deposit">Deposit</button>
+												<button className="split-deposit" data-lang="deposit" onClick={GetDepositBySplit}>Deposit</button>
 											</div>
 										</div>
 
