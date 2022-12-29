@@ -11,13 +11,14 @@ const Deposit = async () => {
     const contractAddress = environment.bsg2Contract;
     const contract = bsg2Contract(contractAddress, web3);
     console.log("bsgContract",contract);
-    const deposit = useCallback(async (price) => {
-        const deposit = await contract.methods.deposit(price).send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash });
-        return deposit
-    }, [account, contract])
+    const deposite = useCallback(async (price) => {
+        const d = await contract.methods.deposit(price).send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash });
+        return d
+    }, [contract])
 
-    return { deposit: deposit }
+    return { deposite }
 
 }
 
 export default Deposit; 
+

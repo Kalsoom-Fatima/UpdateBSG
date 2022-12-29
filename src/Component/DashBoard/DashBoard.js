@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import address from "../../Assets/address.png";
 import wallet from "../../Assets/wallet.png"
 import runningtime from "../../Assets/running-time.png"
@@ -26,38 +26,40 @@ function DashBoard() {
 	const [modalShowOne, setModalShowOne] = React.useState(false)
 	const [modalShowTwo, setModalShowTwo] = React.useState(false)
 
-	const { deposit } = Deposit()
-    const { Approve } = ApproveTokens()
-	const { withdraw} = Withdraw()
+	const { deposite } = Deposit()
+	const { Approve } = ApproveTokens()
+	const { withdraw } = Withdraw()
 
-    const [depositAmount, setDepositAmount] = useState('');
-	console.log("Deposit amount",depositAmount)
+	const [depositAmount, setDepositAmount] = useState('');
+	console.log("Deposit amount", depositAmount)
+
 	const GetDeposit = async () => {
 		if (depositAmount == '' || 0) {
 			alert('please enter value ')
 			return;
 		}
-		if(depositAmount < 100){
+		if (depositAmount < 100) {
 			alert("Value should be greater than 100")
 			return;
 		}
-        try {
-        	
-               await deposit(depositAmount)
+		try {
+			
+			await deposite(depositAmount)
+			// await Approve()
 
 
-        } catch (e) {
-            console.log("e", e);
-        }
-    }
+		} catch (e) {
+			console.log("e", e);
+		}
+	}
 	const GetWithdraw = async () => {
-        try {
-               await withdraw();
-			   console.log("Hello");
-        } catch (e) {
-            console.log("e", e);
-        }
-    }
+		try {
+			await withdraw();
+			console.log("Hello");
+		} catch (e) {
+			console.log("e", e);
+		}
+	}
 
 	return (
 		<div>
