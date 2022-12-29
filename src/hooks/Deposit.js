@@ -5,19 +5,23 @@ import environment from '../utils/Environment';
 import { bsg2Contract } from '../utils/contractHelpers';
 
 
-const Deposit = async () => {
+ const Deposit = async (amount) => {
     const { account } = useWeb3React();
     const web3 = useWeb3();
     const contractAddress = environment.bsg2Contract;
     const contract = bsg2Contract(contractAddress, web3);
-    console.log("bsgContract",contract);
-    const deposit = useCallback(async (price) => {
-        const deposit = await contract.methods.deposit(price).send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash });
-        return deposit
-    }, [account, contract])
+    console.log("contract",contract);
+    const deposite = useCallback(async () => {
+        const d = await contract.methods.deposit(amount).send({ from: account }).on('transactionHash', (tx) => { return tx.transactionHash });
+        return d
+    }, [contract,web3])
 
-    return { deposit: deposit }
+    return { deposite:deposite }
 
 }
 
-export default Deposit; 
+
+export default Deposit
+
+export { Deposit };
+
