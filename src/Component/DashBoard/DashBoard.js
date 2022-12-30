@@ -27,12 +27,12 @@ import TransferBySplit from '../../hooks/TransferbySplit';
 
 function DashBoard() {
 
-	const {account}=useWeb3React()
+	const { account } = useWeb3React()
 	const [modalShow, setModalShow] = React.useState(false);
 	const [modalShowOne, setModalShowOne] = React.useState(false)
 	const [modalShowTwo, setModalShowTwo] = React.useState(false)
 
-	const { Approve } = ApproveTokens()
+	const { approve } = ApproveTokens()
 	const { deposite } = Deposit()
 	const { withdraw } = Withdraw()
 	const { depositBySplit } = DepositBySplit()
@@ -47,7 +47,7 @@ function DashBoard() {
 	console.log("Deposit amount", depositAmount)
 
 	const GetDeposit = async () => {
-		if(account){
+		if (account) {
 
 			if (depositAmount == '' || 0) {
 				alert('please enter value ')
@@ -58,20 +58,20 @@ function DashBoard() {
 				return;
 			}
 			try {
-	
+				await approve(depositAmount)
 				await deposite(depositAmount)
-	
-	
+
+
 			} catch (e) {
 				console.log("e", e);
 			}
 		}
-		else{
+		else {
 			alert('please connect to wallet first')
 		}
 	}
 	const GetWithdraw = async () => {
-		if(account){
+		if (account) {
 
 			try {
 				await withdraw();
@@ -80,12 +80,12 @@ function DashBoard() {
 				console.log("e", e);
 			}
 		}
-		else{
+		else {
 			alert('please connect to wallet first')
 		}
 	}
 	const GetDepositBySplit = async () => {
-		if(account){
+		if (account) {
 
 			if (depositBySplitAmount == '' || 0) {
 				alert('please enter value ')
@@ -97,19 +97,19 @@ function DashBoard() {
 			}
 			try {
 				await depositBySplit(depositBySplitAmount)
-	
+
 			} catch (e) {
 				console.log("e", e);
 			}
 		}
-		else{
+		else {
 			alert('please connect to wallet first')
 		}
 	}
 
 
 	const GetTransferBySplit = async () => {
-		if(account){
+		if (account) {
 
 			if (amount == '' || 0) {
 				alert('please enter value ')
@@ -121,12 +121,12 @@ function DashBoard() {
 			}
 			try {
 				await transferBySplit(recieverAdress, amount)
-	
+
 			} catch (e) {
 				console.log("e", e);
 			}
 		}
-		else{
+		else {
 			alert('please connect to wallet first')
 		}
 	}
