@@ -60,7 +60,7 @@ import { bsg2Contract } from '../utils/contractHelpers';
 //     // }, [account, contract])
 
 // }
-const DepositBySplit = async () => {
+const DepositBySplit =  () => {
     const { account } = useWeb3React();
     const web3 = useWeb3();
     const contractAddress = environment.bsg2Contract;

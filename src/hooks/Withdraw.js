@@ -5,7 +5,7 @@ import environment from '../utils/Environment';
 import { bsg2Contract } from '../utils/contractHelpers';
 
 
-const Withdraw = async () => {
+const Withdraw =  () => {
     const { account } = useWeb3React();
     const web3 = useWeb3();
     const contractAddress = environment.bsg2Contract;

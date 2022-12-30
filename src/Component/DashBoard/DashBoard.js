@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import address from "../../Assets/address.png";
 import wallet from "../../Assets/wallet.png"
 import runningtime from "../../Assets/running-time.png"
@@ -12,74 +12,124 @@ import detailgroup from "../../Assets/detail-group.png";
 import detailwithraw from "../../Assets/detail-withraw.png";
 import troncurrency from "../../Assets/tron-currency.png"
 import "./Dashboard.css"
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import modalX from "../../Assets/modal-x.png"
 
+import { useWeb3React } from '@web3-react/core';
 import ApproveTokens from "../../hooks/Approve";
 import Deposit from "../../hooks/Deposit";
 import Withdraw from "../../hooks/Withdraw";
 import DepositBySplit from "../../hooks/DepositBySplit";
+import TransferBySplit from '../../hooks/TransferbySplit';
+
 
 
 
 function DashBoard() {
+
+	const {account}=useWeb3React()
 	const [modalShow, setModalShow] = React.useState(false);
 	const [modalShowOne, setModalShowOne] = React.useState(false)
 	const [modalShowTwo, setModalShowTwo] = React.useState(false)
 
-	const { deposit } = Deposit()
-    const { Approve } = ApproveTokens()
-	const { withdraw} = Withdraw()
-	const {depositBySplit} = DepositBySplit
+	const { Approve } = ApproveTokens()
+	const { deposite } = Deposit()
+	const { withdraw } = Withdraw()
+	const { depositBySplit } = DepositBySplit()
+	const { transferBySplit } = TransferBySplit()
 
-    const [depositAmount, setDepositAmount] = useState('');
-    const [depositBySplitAmount, setDepositBySplitAmount] = useState('');
+	const [depositAmount, setDepositAmount] = useState('');
+	const [depositBySplitAmount, setDepositBySplitAmount] = useState('');
 
-	console.log("Deposit amount",depositAmount)
+	const [amount, setAmount] = useState('')
+	const [recieverAdress, setRecieverAdress] = useState('')
+
+	console.log("Deposit amount", depositAmount)
+
 	const GetDeposit = async () => {
-		if (depositAmount == '' || 0) {
-			alert('please enter value ')
-			return;
-		}
-		if(depositAmount < 100){
-			alert("Value should be greater than 100")
-			return;
-		}
-        try {
-        	
-               await deposit(depositAmount)
+		if(account){
 
-
-        } catch (e) {
-            console.log("e", e);
-        }
-    }
+			if (depositAmount == '' || 0) {
+				alert('please enter value ')
+				return;
+			}
+			if (depositAmount < 100) {
+				alert("Value should be greater than 100")
+				return;
+			}
+			try {
+	
+				await deposite(depositAmount)
+	
+	
+			} catch (e) {
+				console.log("e", e);
+			}
+		}
+		else{
+			alert('please connect to wallet first')
+		}
+	}
 	const GetWithdraw = async () => {
-        try {
-               await withdraw();
-			   console.log("Hello");
-        } catch (e) {
-            console.log("e", e);
-        }
-    }
+		if(account){
+
+			try {
+				await withdraw();
+				console.log("Hello");
+			} catch (e) {
+				console.log("e", e);
+			}
+		}
+		else{
+			alert('please connect to wallet first')
+		}
+	}
 	const GetDepositBySplit = async () => {
-		if (depositBySplitAmount == '' || 0) {
-			alert('please enter value ')
-			return;
-		}
-		if(depositBySplitAmount < 100){
-			alert("Value should be greater than 100")
-			return;
-		}
-        try {       	
-               await depositBySplit(depositBySplitAmount)
+		if(account){
 
-        } catch (e) {
-            console.log("e", e);
-        }
-    }
+			if (depositBySplitAmount == '' || 0) {
+				alert('please enter value ')
+				return;
+			}
+			if (depositBySplitAmount < 100) {
+				alert("Value should be greater than 100")
+				return;
+			}
+			try {
+				await depositBySplit(depositBySplitAmount)
+	
+			} catch (e) {
+				console.log("e", e);
+			}
+		}
+		else{
+			alert('please connect to wallet first')
+		}
+	}
 
+
+	const GetTransferBySplit = async () => {
+		if(account){
+
+			if (amount == '' || 0) {
+				alert('please enter value ')
+				return;
+			}
+			if (amount < 100) {
+				alert("Value should be greater than 100")
+				return;
+			}
+			try {
+				await transferBySplit(recieverAdress, amount)
+	
+			} catch (e) {
+				console.log("e", e);
+			}
+		}
+		else{
+			alert('please connect to wallet first')
+		}
+	}
 	return (
 		<div>
 			<div className='container mt-5 mb-5'>
@@ -859,7 +909,7 @@ function DashBoard() {
 											<div className="split-body-data-input">
 												<p data-lang="amount">Amount</p>
 												<div className="deposit-body-data-input">
-													<input type="text" placeholder="Amount" className="splitDepositAmount" value={depositBySplitAmount} onChange={e => setDepositBySplitAmount(e.target.value)}/>
+													<input type="text" placeholder="Amount" className="splitDepositAmount" value={depositBySplitAmount} onChange={e => setDepositBySplitAmount(e.target.value)} />
 													<div className="deposit-body-data-price">
 														<img src={troncurrency} height="24" />
 														<h3>USDT</h3>
@@ -881,12 +931,15 @@ function DashBoard() {
 													<option value="1" data-lang="lottery_balance">Lottery Balance</option>
 												</select>
 												<div className="split-body-data-price">
-													<input type="text" data-lang="receiver_placeholder"
+													<input type="text" data-lang="receiver_placeholder" value={recieverAdress}
+														onChange={(e) => setRecieverAdress(e.target.value)}
 														placeholder="Receiver address" className="receiver" />
 												</div>
 												<p data-lang="split_account">Amount</p>
 												<div className="deposit-body-data-input">
 													<input type="text" data-lang="amount_placeholder" placeholder="Transfer amount"
+														value={amount}
+														onChange={(e) => setAmount(e.target.value)}
 														className="transferAmount" />
 													<div className="deposit-body-data-price">
 														<img src={troncurrency} height="24" />
@@ -896,7 +949,9 @@ function DashBoard() {
 												<p data-lang="fee_hint">10% will be burn for each transfer</p>
 											</div>
 											<div className="deposit-body-data-button">
-												<button className="split-deposit" data-lang="transfer">Transfer</button>
+												<button className="split-deposit" data-lang="transfer"
+
+													onClick={GetTransferBySplit}>Transfer</button>
 											</div>
 										</div>
 									</div>
